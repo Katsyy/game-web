@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Click & Dodge Game</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #score {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
+
+        #box {
+            width: 60px;
+            height: 60px;
+            background: #00ffcc;
+            position: absolute;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #gameOver {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="score">Skor: 0</div>
+<div id="box"></div>
+
+<div id="gameOver">
+    <h1>Game Over</h1>
+    <p id="finalScore"></p>
+    <button onclick="startGame()">Main Lagi</button>
+</div>
+
+<script>
+    const box = document.getElementById("box");
+    const scoreText = document.getElementById("score");
+    const gameOverScreen = document.getElementById("gameOver");
+    const finalScore = document.getElementById("finalScore");
+
+    let score = 0;
+    let timeLimit = 1500;
+    let timer;
+
+    function randomPosition() {
+        const x = Math.random() * (window.innerWidth - 60);
+        const y = Math.random() * (window.innerHeight - 60);
+        box.style.left = x + "px";
+        box.style.top = y + "px";
+    }
+
+    function showBox() {
+        randomPosition();
+        box.style.display = "block";
+
+        timer = setTimeout(() => {
+            endGame();
+        }, timeLimit);
+    }
+
+    box.onclick = () => {
+        clearTimeout(timer);
+        score++;
+        scoreText.textContent = "Skor: " + score;
+
+        if (timeLimit > 400) {
+            timeLimit -= 80;
+        }
+
+        showBox();
+    };
+
+    function startGame() {
+        score = 0;
+        timeLimit = 1500;
+        scoreText.textContent = "Skor: 0";
+        gameOverScreen.style.display = "none";
+        showBox();
+    }
+
+    function endGame() {
+        box.style.display = "none";
+        finalScore.textContent = "Skor akhir kamu: " + score;
+        gameOverScreen.style.display = "flex";
+    }
+
+    startGame();
+</script>
+
+</body>
+</html>
